@@ -1,26 +1,27 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Text,
   TouchableHighlight,
   View,
   Appearance,
-} from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import Modal from "./Modal";
-import { isIphoneX } from "./utils";
+  Dimensions,
+} from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Modal from './Modal';
+import {isIphoneX} from './utils';
 
-export const BACKGROUND_COLOR_LIGHT = "white";
-export const BACKGROUND_COLOR_DARK = "#0E0E0E";
-export const BORDER_COLOR = "#d5d5d5";
-export const BORDER_COLOR_DARK = "#272729";
+export const BACKGROUND_COLOR_LIGHT = 'white';
+export const BACKGROUND_COLOR_DARK = '#0E0E0E';
+export const BORDER_COLOR = '#d5d5d5';
+export const BORDER_COLOR_DARK = '#272729';
 export const BORDER_RADIUS = 13;
-export const BUTTON_FONT_WEIGHT = "normal";
-export const BUTTON_FONT_COLOR = "#007ff9";
+export const BUTTON_FONT_WEIGHT = 'normal';
+export const BUTTON_FONT_COLOR = '#007ff9';
 export const BUTTON_FONT_SIZE = 20;
-export const HIGHLIGHT_COLOR_DARK = "#444444";
-export const HIGHLIGHT_COLOR_LIGHT = "#ebebeb";
+export const HIGHLIGHT_COLOR_DARK = '#444444';
+export const HIGHLIGHT_COLOR_LIGHT = '#ebebeb';
 
 export class DateTimePickerModal extends React.PureComponent {
   static propTypes = {
@@ -51,8 +52,8 @@ export class DateTimePickerModal extends React.PureComponent {
   };
 
   static defaultProps = {
-    cancelTextIOS: "Cancel",
-    confirmTextIOS: "Confirm",
+    cancelTextIOS: 'Cancel',
+    confirmTextIOS: 'Confirm',
     modalPropsIOS: {},
     date: new Date(),
     isDarkModeEnabled: undefined,
@@ -72,7 +73,7 @@ export class DateTimePickerModal extends React.PureComponent {
 
   static getDerivedStateFromProps(props, state) {
     if (props.isVisible && !state.isPickerVisible) {
-      return { currentDate: props.date, isPickerVisible: true };
+      return {currentDate: props.date, isPickerVisible: true};
     }
     return null;
   }
@@ -88,18 +89,18 @@ export class DateTimePickerModal extends React.PureComponent {
   };
 
   handleHide = () => {
-    const { onHide } = this.props;
+    const {onHide} = this.props;
     if (onHide) {
       onHide(this.didPressConfirm, this.state.currentDate);
     }
-    this.setState({ isPickerVisible: false });
+    this.setState({isPickerVisible: false});
   };
 
   handleChange = (event, date) => {
     if (this.props.onChange) {
       this.props.onChange(date);
     }
-    this.setState({ currentDate: date });
+    this.setState({currentDate: date});
   };
 
   render() {
@@ -134,7 +135,7 @@ export class DateTimePickerModal extends React.PureComponent {
     );
     const _isDarkModeEnabled =
       isDarkModeEnabled === undefined && isAppearanceModuleAvailable
-        ? Appearance.getColorScheme() === "dark"
+        ? Appearance.getColorScheme() === 'dark'
         : isDarkModeEnabled || false;
 
     const ConfirmButtonComponent = customConfirmButtonIOS || ConfirmButton;
@@ -153,29 +154,26 @@ export class DateTimePickerModal extends React.PureComponent {
         onBackdropPress={this.handleCancel}
         onHide={this.handleHide}
         backdropStyle={backdropStyleIOS}
-        {...modalPropsIOS}
-      >
+        {...modalPropsIOS}>
         <View
           style={[
             pickerStyles.container,
             themedContainerStyle,
             pickerContainerStyleIOS,
-          ]}
-        >
+          ]}>
           {HeaderComponent && <HeaderComponent />}
-          {!HeaderComponent && display === "inline" && (
+          {!HeaderComponent && display === 'inline' && (
             <View style={pickerStyles.headerFiller} />
           )}
           <View
             style={[
-              display === "inline"
+              display === 'inline'
                 ? pickerStyles.pickerInline
                 : pickerStyles.pickerSpinner,
               pickerStyleIOS,
-            ]}
-          >
+            ]}>
             <PickerComponent
-              display={display || "spinner"}
+              display={display || 'spinner'}
               {...otherProps}
               value={this.state.currentDate}
               onChange={this.handleChange}
@@ -188,9 +186,9 @@ export class DateTimePickerModal extends React.PureComponent {
                 {
                   height:
                     !customPickerIOS &&
-                    otherProps.mode === "datetime" &&
-                    display === "inline"
-                      ? 370
+                    otherProps.mode === 'datetime' &&
+                    display === 'inline'
+                      ? 100 + (Dimensions.get('window').width * 5.0) / 7.0
                       : undefined,
                 },
                 pickerComponentStyleIOS,
@@ -219,14 +217,14 @@ export class DateTimePickerModal extends React.PureComponent {
 
 const pickerStyles = StyleSheet.create({
   modal: {
-    justifyContent: "flex-end",
+    justifyContent: 'flex-end',
     margin: 10,
     marginBottom: isIphoneX() ? 34 : 10,
   },
   container: {
     borderRadius: BORDER_RADIUS,
     marginBottom: 8,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   pickerSpinner: {
     marginBottom: 8,
@@ -266,14 +264,9 @@ export const ConfirmButton = ({
       onPress={onPress}
       accessible={true}
       accessibilityRole="button"
-      accessibilityLabel={label}
-    >
+      accessibilityLabel={label}>
       <Text
-        style={[
-          style.text,
-          buttonTextColorIOS && { color: buttonTextColorIOS },
-        ]}
-      >
+        style={[style.text, buttonTextColorIOS && {color: buttonTextColorIOS}]}>
         {label}
       </Text>
     </TouchableHighlight>
@@ -283,9 +276,9 @@ export const ConfirmButton = ({
 export const confirmButtonStyles = StyleSheet.create({
   button: {
     borderTopWidth: StyleSheet.hairlineWidth,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
     height: 57,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   buttonLight: {
     borderColor: BORDER_COLOR,
@@ -294,11 +287,11 @@ export const confirmButtonStyles = StyleSheet.create({
     borderColor: BORDER_COLOR_DARK,
   },
   text: {
-    textAlign: "center",
+    textAlign: 'center',
     color: BUTTON_FONT_COLOR,
     fontSize: BUTTON_FONT_SIZE,
     fontWeight: BUTTON_FONT_WEIGHT,
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
 });
 
@@ -324,14 +317,9 @@ export const CancelButton = ({
       onPress={onPress}
       accessible={true}
       accessibilityRole="button"
-      accessibilityLabel={label}
-    >
+      accessibilityLabel={label}>
       <Text
-        style={[
-          style.text,
-          buttonTextColorIOS && { color: buttonTextColorIOS },
-        ]}
-      >
+        style={[style.text, buttonTextColorIOS && {color: buttonTextColorIOS}]}>
         {label}
       </Text>
     </TouchableHighlight>
@@ -342,7 +330,7 @@ export const cancelButtonStyles = StyleSheet.create({
   button: {
     borderRadius: BORDER_RADIUS,
     height: 57,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   buttonLight: {
     backgroundColor: BACKGROUND_COLOR_LIGHT,
@@ -352,10 +340,10 @@ export const cancelButtonStyles = StyleSheet.create({
   },
   text: {
     padding: 10,
-    textAlign: "center",
+    textAlign: 'center',
     color: BUTTON_FONT_COLOR,
     fontSize: BUTTON_FONT_SIZE,
-    fontWeight: "600",
-    backgroundColor: "transparent",
+    fontWeight: '600',
+    backgroundColor: 'transparent',
   },
 });
